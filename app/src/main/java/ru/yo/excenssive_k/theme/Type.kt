@@ -1,4 +1,4 @@
-package ru.yo.excenssive_k.ui.theme
+package ru.yo.excenssive_k.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

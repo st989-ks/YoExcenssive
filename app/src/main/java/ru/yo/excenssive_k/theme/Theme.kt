@@ -1,4 +1,4 @@
-package ru.yo.excenssive_k.ui.theme
+package ru.yo.excenssive_k.theme
 
 import android.app.Activity
 import android.os.Build
