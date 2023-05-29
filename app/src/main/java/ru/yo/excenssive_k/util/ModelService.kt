@@ -41,18 +41,19 @@ class ModelService(
     fun registration(
         userName: String,
         password: String,
-        inSuccess:()->Unit
+        inSuccess: () -> Unit
     ) {
         launch {
+            _clickValue.value = 0
             _isSignUser.value = client.registration(
                 userName = userName,
                 password = password,
                 flowMessage = {
-
                 }
             )
-            if (_isSignUser.value){
+            if (_isSignUser.value) {
                 inSuccess.invoke()
+                click()
             }
         }
     }
@@ -60,9 +61,10 @@ class ModelService(
     fun authorization(
         userName: String,
         password: String,
-        inSuccess:()->Unit
+        inSuccess: () -> Unit
     ) {
         launch {
+            _clickValue.value = 0
             _isSignUser.value = client.authorization(
                 userName = userName,
                 password = password,
@@ -70,10 +72,10 @@ class ModelService(
 
                 }
             )
-            if (_isSignUser.value){
+            if (_isSignUser.value) {
                 inSuccess.invoke()
+                click()
             }
-
         }
     }
 

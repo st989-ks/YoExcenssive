@@ -40,8 +40,6 @@ class AppController(
     private val stack = mutableListOf<View>()
     val last: MutableStateFlow<View> = MutableStateFlow(default)
 
-    val isSignUser = service.isSignUser
-
     fun push(item: @Composable (AppController) -> Unit) {
         stack.add(item)
         last.value = item
@@ -56,9 +54,7 @@ class AppController(
         last.value = stack.lastOrNull() ?: default
     }
 
-
     fun click() {
-        GlobalScope.launch {}
         service.click()
     }
 
@@ -66,7 +62,6 @@ class AppController(
         userName: String,
         password: String
     ) {
-        GlobalScope.launch {}
         service.registration(
             userName = userName,
             password = password) {
@@ -78,7 +73,6 @@ class AppController(
         userName: String,
         password: String
     ) {
-        GlobalScope.launch {}
         service.authorization(
             userName = userName,
             password = password) {

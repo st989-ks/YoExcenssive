@@ -43,11 +43,7 @@ class APIClient(
     private val apiUrl: String = "http://85.92.108.5:8822/api/v1/",
     private val context: Context
 ) : Closeable {
-    var token: String? = null
-
-
     private val client = HttpClient {
-        token = getLocalData().token
         install(ContentNegotiation) {
             jackson {}
             json()
@@ -186,6 +182,7 @@ class APIClient(
 
 
     private fun HttpRequestBuilder.apiUrl(path: String) {
+        val token = getLocalData().token
         header(HttpHeaders.Authorization, "Bearer $token")
         url {
             encodedPath = path
