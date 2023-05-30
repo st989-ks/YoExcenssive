@@ -8,6 +8,6 @@ fun InitController(
     service: ModelService,
 ) {
     WithAppController(service) {
-        Login(it)
+        Splash()
     }
 }

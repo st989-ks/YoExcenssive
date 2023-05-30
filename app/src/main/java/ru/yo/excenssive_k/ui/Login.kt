@@ -29,7 +29,10 @@ import androidx.compose.ui.text.input.TextFieldValue
 import ru.yo.excenssive_k.theme.DimApp
 
 @Composable
-fun Login(controller: AppController) {
+fun Login(
+    authorization: (String, String) -> Unit,
+    goToRegistration: () -> Unit
+) {
     var login by remember { mutableStateOf(TextFieldValue()) }
     var password by remember { mutableStateOf(TextFieldValue()) }
     Column(
@@ -81,17 +84,14 @@ fun Login(controller: AppController) {
             Box(modifier = Modifier.size(DimApp.screenPadding))
 
             Button(onClick = {
-                controller.authorization(
-                    userName = login.text,
-                    password = password.text
-                )
+                authorization.invoke(login.text,password.text)
             }) {
                 Text("Давай авторизовываться")
             }
         }
 
         Box(modifier = Modifier.size(DimApp.screenPadding))
-        Button(onClick = { controller.showRegistration() }) {
+        Button(onClick = goToRegistration) {
             Text("Пошли регистрироваться")
         }
         Box(modifier = Modifier.size(DimApp.screenPadding))

@@ -29,7 +29,9 @@ import androidx.compose.ui.text.input.TextFieldValue
 import ru.yo.excenssive_k.theme.DimApp
 
 @Composable
-fun Registration(controller: AppController) {
+fun Registration(
+    registration: (String, String) -> Unit
+) {
     var login by remember { mutableStateOf(TextFieldValue()) }
     var password by remember { mutableStateOf(TextFieldValue()) }
     Column(
@@ -80,10 +82,7 @@ fun Registration(controller: AppController) {
             Box(modifier = Modifier.size(DimApp.screenPadding))
 
             Button(onClick = {
-                controller.registration(
-                    userName = login.text,
-                    password = password.text
-                )
+                registration.invoke(login.text, password.text)
             }) {
                 Text("Давай регистрироваться")
             }

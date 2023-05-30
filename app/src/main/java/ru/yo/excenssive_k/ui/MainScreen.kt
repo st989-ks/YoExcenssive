@@ -26,14 +26,22 @@ import androidx.compose.ui.draw.paint
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import ru.yo.excenssive_k.R
 import ru.yo.excenssive_k.theme.DimApp
 
 @Composable
-fun MainScreen(controller: AppController, clickValue: Int) {
+fun MainScreen(
+    onClickBigButton: ()-> Unit,
+    clickValue: Int) {
+    val des = LocalDensity.current
     var isButtonSize by remember { mutableStateOf(1f) }
     val weightSizeButton = animateFloatAsState(targetValue = isButtonSize)
+    var paddingButton by remember { mutableStateOf(0.dp) }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -43,6 +51,9 @@ fun MainScreen(controller: AppController, clickValue: Int) {
 
         Column(
             modifier = Modifier
+                .onGloballyPositioned { layoutCoordinates ->
+                    paddingButton =  with(des){layoutCoordinates.size.height.toDp()}
+                }
                 .align(Alignment.TopCenter)
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -65,6 +76,7 @@ fun MainScreen(controller: AppController, clickValue: Int) {
 
         Box(modifier = Modifier
             .align(Alignment.Center)
+            .padding(vertical = paddingButton)
             .padding(DimApp.screenPadding*2)
             .scale(weightSizeButton.value)
             .clip(CircleShape)
@@ -74,10 +86,10 @@ fun MainScreen(controller: AppController, clickValue: Int) {
                     MotionEvent.ACTION_DOWN
                     do {
                         val event = awaitPointerEvent()
-                        isButtonSize = 0.8f
+                        isButtonSize = 0.9f
                     } while (event.changes.any { it.pressed })
                     isButtonSize = 1f
-                    controller.click()
+                    onClickBigButton.invoke()
                 }
             }.paint(
                 painter = painterResource(id = R.drawable.button_one)

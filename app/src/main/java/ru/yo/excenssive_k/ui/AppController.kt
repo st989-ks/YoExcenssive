@@ -1,13 +1,12 @@
 package ru.yo.excenssive_k.ui
 
+import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 import ru.yo.excenssive_k.MainActivity
 import ru.yo.excenssive_k.util.BackPressHandler
 import ru.yo.excenssive_k.util.ModelService
@@ -47,7 +46,7 @@ class AppController(
 
     fun back() {
         if (stack.isEmpty()) {
-            (service.context as MainActivity).finish()
+            (service.context as Activity).finish()
             return
         }
         stack.removeLast()
@@ -80,10 +79,33 @@ class AppController(
         }
     }
 
-    fun showRegistration() = push { Registration(this) }
-    fun showLogin() = push { Login(this) }
+    fun showRegistration() = push {
+        Registration(registration = { login, password ->
+            registration(
+                userName = login,
+                password = password
+            )
+        })
+    }
+
+    fun showLogin() = push {
+
+        Login(authorization = { login, password ->
+            authorization(
+                userName = login,
+                password = password
+            )
+        },
+            goToRegistration = ::showRegistration
+        )
+    }
+
+    fun showSplashScreen() = push { Splash() }
     fun showMainScreen() = push {
         val clickableValue by service.clickValue.collectAsState()
-        MainScreen(this,clickableValue ) }
+        MainScreen(
+            onClickBigButton = ::click,
+            clickValue= clickableValue)
+    }
 }
 

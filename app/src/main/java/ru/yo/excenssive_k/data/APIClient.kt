@@ -160,17 +160,20 @@ class APIClient(
             }
             if (!response.status.isSuccess()) {
                 val data = response.body<BasicApi<Any>>()
-                Log.i("APIClient", "authorization: data.description")
+                Log.i("APIClient", "click: data.description")
                 flowMessage.invoke(data.description)
+                flowSuccess.invoke(null)
                 return false
             }
             response.body()
         } catch (e: Exception) {
-            Log.i("APIClient", "authorization: Exception")
+            Log.i("APIClient", "click: Exception")
             e.printStackTrace()
             flowMessage.invoke("Exception")
+            flowSuccess.invoke(null)
             return false
         }
+        Log.i("APIClient", "click: flowSuccess")
         flowSuccess.invoke(data.data)
         return true
     }

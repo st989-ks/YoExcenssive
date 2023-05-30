@@ -32,9 +32,6 @@ class ModelService(
         APIClient(context = context)
     }
 
-    private val _isSignUser = MutableStateFlow(false)
-    val isSignUser = _isSignUser.asStateFlow()
-
     private val _clickValue = MutableStateFlow(0)
     val clickValue = _clickValue.asStateFlow()
 
@@ -45,13 +42,13 @@ class ModelService(
     ) {
         launch {
             _clickValue.value = 0
-            _isSignUser.value = client.registration(
+            val isSignUser = client.registration(
                 userName = userName,
                 password = password,
                 flowMessage = {
                 }
             )
-            if (_isSignUser.value) {
+            if (isSignUser) {
                 inSuccess.invoke()
                 click()
             }
@@ -65,14 +62,14 @@ class ModelService(
     ) {
         launch {
             _clickValue.value = 0
-            _isSignUser.value = client.authorization(
+            val isSignUser = client.authorization(
                 userName = userName,
                 password = password,
                 flowMessage = {
 
                 }
             )
-            if (_isSignUser.value) {
+            if (isSignUser) {
                 inSuccess.invoke()
                 click()
             }
@@ -85,8 +82,7 @@ class ModelService(
                 flowMessage = {
                 },
                 flowSuccess = {
-                    _isSignUser.value = it?.clickValues != null
-                    isSuccess.invoke(_isSignUser.value)
+                    isSuccess.invoke(it?.clickValues != null)
                     _clickValue.value = it?.clickValues ?: 0
                 }
             )
